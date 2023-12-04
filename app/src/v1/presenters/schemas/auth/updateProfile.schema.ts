@@ -1,24 +1,24 @@
 import { z } from 'zod';
 import { ZodValidationMessageCommon } from '../utils/commonErrorMessage';
-import { ZodValidationMessageAuth } from './utils/errorMessage';
+import { FIRST_NAME_TOO_SHORT_ERROR_MESSAGE, INVALID_EMAIL_ERROR_MESSAGE, LAST_NAME_TOO_SHORT_ERROR_MESSAGE } from '../../../domain/auth/errors';
 
 const updateProfileSchema = z
   .object({
     email: z.union([
       z.string().email({
-        message: `${ZodValidationMessageAuth.STRING_EMAIL_INVALID_MESSAGE}`,
+        message: INVALID_EMAIL_ERROR_MESSAGE,
       }),
       z.undefined(),
     ]),
     firstName: z.union([
       z.string().min(2, {
-        message: `nom ${ZodValidationMessageAuth.STRING_NAME_MINIMUM_MESSAGE}`,
+        message: FIRST_NAME_TOO_SHORT_ERROR_MESSAGE,
       }),
       z.undefined(),
     ]),
     lastName: z.union([
       z.string().min(2, {
-        message: `nom de famille ${ZodValidationMessageAuth.STRING_NAME_MINIMUM_MESSAGE}`,
+        message: LAST_NAME_TOO_SHORT_ERROR_MESSAGE,
       }),
       z.undefined(),
     ]),

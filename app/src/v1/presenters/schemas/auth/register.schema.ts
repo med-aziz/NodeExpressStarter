@@ -1,26 +1,26 @@
 import { z } from 'zod';
 import { ZodValidationMessageCommon } from '../utils/commonErrorMessage';
-import { ZodValidationMessageAuth } from './utils/errorMessage';
 
+import { FIRST_NAME_TOO_SHORT_ERROR_MESSAGE, INVALID_EMAIL_ERROR_MESSAGE, INVALID_PASSWORD_ERROR_MESSAGE, LAST_NAME_TOO_SHORT_ERROR_MESSAGE, PASSWORD_TOO_SHORT_ERROR_MESSAGE } from '../../../domain/auth/errors';
 const registerSchema = z
   .object({
     email: z.string().email({
-      message: `${ZodValidationMessageAuth.STRING_EMAIL_INVALID_MESSAGE}`,
+      message: INVALID_EMAIL_ERROR_MESSAGE,
     }),
     firstName: z.string().min(2, {
-      message: `nom ${ZodValidationMessageAuth.STRING_NAME_MINIMUM_MESSAGE}`,
+      message: FIRST_NAME_TOO_SHORT_ERROR_MESSAGE,
     }),
     lastName: z.string().min(2, {
-      message: `nom de famille ${ZodValidationMessageAuth.STRING_NAME_MINIMUM_MESSAGE}`,
+      message: LAST_NAME_TOO_SHORT_ERROR_MESSAGE
     }),
     password: z
       .string()
       .min(8, {
-        message: `${ZodValidationMessageAuth.STRING_PASSWORD_MINIMUM_MESSAGE}`,
+        message: PASSWORD_TOO_SHORT_ERROR_MESSAGE
       })
       .regex(
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/,
-        `${ZodValidationMessageAuth.STRING_PASSWORD_INVALID_MESSAGE}`,
+        INVALID_PASSWORD_ERROR_MESSAGE,
       ),
     picture: z.string(),
   })

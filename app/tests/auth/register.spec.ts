@@ -1,4 +1,5 @@
 import { validateRegisterPayload } from 'app/src/v1/usecases/auth/register.usecase';
+import { VALIDATION_ERROR_MESSAGE } from 'app/src/v1/utils/validation/validate.schema';
 
 const payload: Array<{ payload: any; err: boolean }> = [
   {
@@ -46,11 +47,10 @@ const payload: Array<{ payload: any; err: boolean }> = [
 describe('RESIGTER USER', () => {
   for (const data of payload) {
     if (data.err) {
-      console.log('here + ', data.payload.email);
       it('SHOULD RETURN AN ERROR', () => {
         expect(() => {
           validateRegisterPayload(data.payload);
-        }).toThrow('Error');
+        }).toThrow(VALIDATION_ERROR_MESSAGE);
       });
     } else {
       it('SHOULD SUCCEED', () => {

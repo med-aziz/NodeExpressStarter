@@ -2,6 +2,8 @@ import { ZodError, ZodSchema } from 'zod';
 import { exceptionService } from '../../core/errors/exceptions';
 import { ZODERROR_CODES } from '../../presenters/middlewares/schemas/validateSchema.middleware';
 
+export const VALIDATION_ERROR_MESSAGE = "Validation Error"
+
 export const validatePayloadSchema = (schema: ZodSchema, payload: any) => {
   try {
     schema.parse(payload) as any;
@@ -20,7 +22,7 @@ export const validatePayloadSchema = (schema: ZodSchema, payload: any) => {
         }
       });
       exceptionService.unprocessabhleEntityException({
-        message: 'Error',
+        message: 'Validation Error',
         errors: errorsPayload,
       });
       return errorsPayload;

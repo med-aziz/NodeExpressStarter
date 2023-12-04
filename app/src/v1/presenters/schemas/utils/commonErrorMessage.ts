@@ -1,6 +1,6 @@
 export enum ZodValidationMessageCommon {
-  FIELDS_UNEXPECTED_MESSAGE = 'champs inattendus',
-  FIELDS_EMPTY_MESSAGE = 'Rien à mettre à jour',
+  FIELDS_UNEXPECTED_MESSAGE = 'Unexpected Values',
+  FIELDS_EMPTY_MESSAGE = 'No Fields Specified',
   FIELDS_EMPTY_KEY = 'data',
 }
 

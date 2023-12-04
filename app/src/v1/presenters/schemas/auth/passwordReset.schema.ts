@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ZodValidationMessageCommon } from '../utils/commonErrorMessage';
-import { ZodValidationMessageAuth } from './utils/errorMessage';
+import { INVALID_PASSWORD_ERROR_MESSAGE, PASSWORD_TOO_SHORT_ERROR_MESSAGE } from '../../../domain/auth/errors';
 
 const passwordResetSchema = z
   .object({
@@ -10,11 +10,11 @@ const passwordResetSchema = z
     newPassword: z
       .string()
       .min(8, {
-        message: `${ZodValidationMessageAuth.STRING_PASSWORD_MINIMUM_MESSAGE}`,
+        message: PASSWORD_TOO_SHORT_ERROR_MESSAGE,
       })
       .regex(
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/,
-        `${ZodValidationMessageAuth.STRING_PASSWORD_INVALID_MESSAGE}`,
+        INVALID_PASSWORD_ERROR_MESSAGE,
       ),
   })
   .strict(`${ZodValidationMessageCommon.FIELDS_UNEXPECTED_MESSAGE}`);
