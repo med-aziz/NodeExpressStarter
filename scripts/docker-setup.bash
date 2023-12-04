@@ -27,17 +27,17 @@ dockercommand+=" -d"
 
 $dockercommand
 
-# # Wait for test database to respond
-# while ! docker exec -it startertestdb bash -c 'mysqladmin ping -h "$MYSQL_DATABASE_HOST" -P "$MYSQL_DATABASE_PORT" -u "$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASSWORD" --silent'; do
-#     echo "Test database is unavailable - sleeping"
-#     sleep 2
-# done
+# Wait for test database to respond
+while ! docker exec -it startertestdb bash -c 'mariadb -h "$MYSQL_DATABASE_HOST"  -u "$MYSQL_ROOT_USER" --password="$MYSQL_ROOT_PASSWORD" --execute="SELECT \"TEST DATABASE UP\";"'; do
+    echo "Test database is unavailable - sleeping"
+    sleep 2
+done
 
-# # Init a reset function in test database
-# docker exec -it startertestdb bash -c 'mysql -u "$MYSQL_ROOT_USER" --password="$MYSQL_ROOT_PASSWORD" -D "$MYSQL_DATABASE" < /container-scripts/init-test-db-proced.sql'
+# Init a reset function in test database
+docker exec -it startertestdb bash -c 'mariadb -u "$MYSQL_ROOT_USER" --password="$MYSQL_ROOT_PASSWORD" -D "$MYSQL_DATABASE" < /container-scripts/init-test-db-proced.sql'
 
-# # Push database changes to test database
-# docker exec -it starterdevapi sh -c "npx typeorm-ts-node-commonjs migration:run --dataSource ./testormconnection.js"
+# Push database changes to test database
+docker exec -it starterdevapi sh -c "npx typeorm-ts-node-commonjs migration:run --dataSource ./testormconnection.js"
 
 # Wait for dev database to respond
 # Add ` > /dev/null ` BEFORE THE CLOSING OF THE SIGNLE QUOTE IF YOU DON'T WANT ANY OUTPUT

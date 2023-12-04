@@ -11,7 +11,6 @@
     "migration": "npx typeorm-ts-node-commonjs migration:run --dataSource ./ormconnection.js",
     "build": "tsc -p tsconfig.build.json && npm run copy-templates",
     "copy-templates": "cp -r ./app/src/v1/usecases/api/mailing/views  ./dist/src/v1/usecases/api/mailing/views ",
-    "test": "./scripts/run-test.bash",
     "jest-test": "jest",
     "format": "prettier --write \"app/**/*.ts\"",
     "lint": "eslint \"app/**/*.ts\" --fix",
@@ -25,6 +24,8 @@
     "docker-dbdev-migrate-revert": "docker exec -it starterdevapi sh -c 'npx typeorm-ts-node-commonjs migration:revert --dataSource ./ormconnection.js'",
     "docker-dbprod-migrate": "docker exec -it starterprodapi sh -c 'npx typeorm-ts-node-commonjs migration:run --dataSource ./ormconnection.js'",
     "docker-dbprod-migrate-revert": "docker exec -it starterprodapi sh -c 'npx typeorm-ts-node-commonjs migration:revert --dataSource ./ormconnection.js'",
+    "e2e-tests": "./scripts/run-e2e-tests.bash",
+    "jest-e2e-tests": "docker exec -it starterdevapi sh -c 'npx jest --config ./app/tests/e2e/jest-e2e.json'",
     "reset-test-db": "./scripts/reset-test-db.bash",
     "prepare": "husky install"
   },

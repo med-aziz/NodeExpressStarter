@@ -28,6 +28,7 @@ export const registerUseCaseBase =
     },
   ): RegisterUseCase =>
   async (payload: ICreateUserInput) => {
+    console.log("IN REGISTER USECASE")
     validateRegisterPayload(payload);
     const userFound = await dependencies.usersRepo.findOne({
       where: {
@@ -60,6 +61,7 @@ export const registerUseCaseBase =
   };
 
 export function validateRegisterPayload(payload: ICreateUserInput): boolean {
+  console.log("VALIDATING REGISTER PAYLOAD")
   validatePayloadSchema(registerSchema, payload);
   return true;
 }

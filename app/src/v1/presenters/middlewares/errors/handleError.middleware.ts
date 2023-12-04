@@ -6,6 +6,7 @@ import { INTERNAL_SERVER_ERROR_MESSAGE, VALIDATION_ERROR_MESSAGE } from '../../.
 
 export const createHandleErrorMiddleware =
   () => (err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.log("IN ERROR MIDDLEWARE BRUH ", err)
     logger.error('ERROR', err.message, err.stack);
     if (err instanceof ApiException) {
       return res.status(err.status).json({

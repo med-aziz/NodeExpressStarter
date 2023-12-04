@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-  registerController,
   transactionalRegisterController,
 } from '../../controllers/auth/register.controller';
 import { loginController } from '../../controllers/auth/login.controller';
@@ -23,12 +22,11 @@ import { setDefaultProfilePicIfNotGiven } from '../../middlewares/auth/setDefaul
 
 const v1AuthRouter = Router();
 const defaults = {
-  registerController: registerController,
+  registerController: transactionalRegisterController,
   loginController: loginController,
   refreshTokensController: refreshTokensController,
   requestUserAccountVerificationController: requestAccountVerificationController,
   verifyAccountController: verifyAccountController,
-  transactionalRegisterController: transactionalRegisterController,
   requestPasswordResetController: requestPasswordResetController,
   passwordResetController: passwordResetController,
   logoutController: logoutController,
@@ -40,7 +38,6 @@ function getV1AuthRouter(
     refreshTokensController: ControllerType;
     requestUserAccountVerificationController: ControllerType;
     verifyAccountController: ControllerType;
-    transactionalRegisterController: ControllerType;
     requestPasswordResetController: ControllerType;
     passwordResetController: ControllerType;
     logoutController: ControllerType;
@@ -52,7 +49,7 @@ function getV1AuthRouter(
       multerImageUpload.single('picture'),
       transferFilePathToBodyMiddlewareBuilder('picture', FilePathTypes.IMAGES),
       setDefaultProfilePicIfNotGiven('picture'),
-      controllers.transactionalRegisterController,
+      controllers.registerController,
     );
   v1AuthRouter.route('/login').post(controllers.loginController);
   v1AuthRouter
