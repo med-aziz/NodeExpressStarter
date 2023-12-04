@@ -1,0 +1,38 @@
+import { exceptionService } from '../../../core/errors/exceptions';
+import { IUsersRepository, usersRepo } from '../../../data/repositories/users.repository';
+import { IUser } from '../../../domain/users/user';
+import { IRequestUser } from '../../auth/types/IRequestUser';
+
+export type UpdateMyProfileUseCaseType = (
+  user: IRequestUser,
+  payload: Partial<IUser>,
+) => Promise<IUser>;
+
+export const updateMyProfileUseCaseBase =
+  (dependencies: { usersRepo: IUsersRepository }) =>
+  async (user: IRequestUser, payload: Partial<IUser>) => {
+    const userFound = await dependencies.usersRepo.findOne({
+      where: {
+        id: parseInt(user.id),
+      },
+    });
+
+    if (!userFound) {
+      exceptionService.notFoundException({
+        message: "Le compte n'est pas trouvé",
+      });
+    }
+
+    const updatedUser = await dependencies.usersRepo.updateOne(userFound, {
+      email: payload?.email || userFound.email,
+      first_name: payload?.firstName || userFound.firstName,
+      last_name: payload?.lastName || userFound.lastName,
+      picture: payload?.picture || userFound.picture,
+    });
+
+    return updatedUser;
+  };
+
+export const updateMyProfileUseCase: UpdateMyProfileUseCaseType = updateMyProfileUseCaseBase({
+  usersRepo: usersRepo,
+});
