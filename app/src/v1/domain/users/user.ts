@@ -41,6 +41,8 @@ export interface ICreateUserInput {
   isEmailVerified?: boolean;
   confirmationToken?: string;
   picture: string;
+  username: string;
+  verifyPassword?: string;
 }
 
 export interface IUserPasswordResetInformation extends IIdAsNumber {

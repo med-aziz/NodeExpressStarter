@@ -19,3 +19,5 @@ export const ACCOUNT_ALREADY_EXISTS_ERROR_MESSAGE =
   'An Account With The Given Email Already Exists';
 export const ACCOUNT_VERIFICATION_ERROR_MESSAGE =
   "Couldn't verify your account, please use the link sent to your email";
+export const USERNAME_TOO_SHORT_ERROR_MESSAGE = 'Username must be longer than 4 characters';
+export const PASSWORDS_DO_NOT_MATCH_ERROR_MESSAGE = 'Passwords Do Not Match';

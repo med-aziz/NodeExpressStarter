@@ -26,12 +26,9 @@ export const registerUseCaseBase =
     },
   ): RegisterUseCase =>
   async (payload: ICreateUserInput) => {
-    console.log('IN REGISTER USECASE');
     validateRegisterPayload(payload);
     const userFound = await dependencies.usersRepo.findOne({
-      where: {
-        email: payload.email,
-      },
+      where: [{ email: payload.email }, { username: payload.username }],
     });
     if (userFound) {
       exceptionService.badRequestException({
@@ -48,6 +45,7 @@ export const registerUseCaseBase =
       lastName: payload.lastName,
       confirmationToken: '',
       picture: payload.picture,
+      username: payload.username,
     });
     logger.log('REGISTER USE CASE', JSON.stringify(userCreated));
     await dependencies.generateAndSendUserAccountVerificationEmail(
@@ -62,7 +60,6 @@ export const registerUseCaseBase =
   };
 
 export function validateRegisterPayload(payload: ICreateUserInput): boolean {
-  console.log('VALIDATING REGISTER PAYLOAD');
   validatePayloadSchema(registerSchema, payload);
   return true;
 }

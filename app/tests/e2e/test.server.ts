@@ -3,7 +3,7 @@ import * as cookieParser from 'cookie-parser';
 import getV1AuthRouter from 'app/src/v1/presenters/routes/auth';
 import { loginControllerBase } from 'app/src/v1/presenters/controllers/auth/login.controller';
 import { loginUseCaseBase } from 'app/src/v1/usecases/auth/login.usecase';
-import {  usersRepoBase } from 'app/src/v1/data/repositories/users.repository';
+import { usersRepoBase } from 'app/src/v1/data/repositories/users.repository';
 import { createUserTokensUseCase } from 'app/src/v1/usecases/auth/createUserTokens.usecase';
 import { logoutControllerBase } from 'app/src/v1/presenters/controllers/auth/logout.controller';
 import { registerControllerBase } from 'app/src/v1/presenters/controllers/auth/register.controller';
@@ -66,7 +66,7 @@ server.use(
           usersRepo: usersRepoBase(tx),
           createUserTokensUseCase: createUserTokensUseCase,
           generateAndSendUserAccountVerificationEmail: async (user: IUser) => {
-            console.log(`SENDING EMAIL TO USER ${user}`);
+            console.log(`GENERATE AND SEND FOR USER ${user}`);
             return '';
           },
         }),

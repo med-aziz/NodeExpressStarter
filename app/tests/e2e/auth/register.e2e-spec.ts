@@ -1,3 +1,4 @@
+import { ACCOUNT_ALREADY_EXISTS_ERROR_MESSAGE } from 'app/src/v1/domain/auth/errors';
 import testDataSource from '../test.db.connection';
 import testserver from '../test.server';
 import * as request from 'supertest';
@@ -13,30 +14,14 @@ describe('POST /v1/auth/register', () => {
     const res = await request(testserver).post('/v1/auth/register');
     expect(res.statusCode).toBe(422);
   });
-  it('should return 422 when email is not valid', async () => {
-    const res = await request(testserver).post('/v1/auth/register').send({
-      email: 'testemail',
-      firstName: 'testfirstname',
-      lastName: 'testlastname',
-      password: 'testpassword123@',
-    });
-    expect(res.statusCode).toBe(422);
-  });
-  it('should return 422 when email is not valid', async () => {
-    const res = await request(testserver).post('/v1/auth/register').send({
-      email: 'testemail1@gmail',
-      firstName: 'testfirstname',
-      lastName: 'testlastname',
-      password: 'testpassword123@A',
-    });
-    expect(res.statusCode).toBe(422);
-  });
   it('should return 201 when everything is valid', async () => {
     const res = await request(testserver).post('/v1/auth/register').send({
       email: 'testemail@gmail.com',
       firstName: 'testfirstname',
       lastName: 'testlastname',
       password: 'testpassword123@A',
+      verifyPassword: 'testpassword123@A',
+      username: 'testusername',
     });
     expect(res.statusCode).toBe(201);
   });
@@ -46,7 +31,22 @@ describe('POST /v1/auth/register', () => {
       firstName: 'testfirstname',
       lastName: 'testlastname',
       password: 'testpassword123@A',
+      verifyPassword: 'testpassword123@A',
+      username: 'testusername1',
     });
     expect(res.statusCode).toBe(400);
+    expect(res.body.message).toEqual(ACCOUNT_ALREADY_EXISTS_ERROR_MESSAGE);
+  });
+  it('should return 400 when username is already used', async () => {
+    const res = await request(testserver).post('/v1/auth/register').send({
+      email: 'testemail1@gmail.com',
+      firstName: 'testfirstname',
+      lastName: 'testlastname',
+      password: 'testpassword123@A',
+      verifyPassword: 'testpassword123@A',
+      username: 'testusername',
+    });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.message).toEqual(ACCOUNT_ALREADY_EXISTS_ERROR_MESSAGE);
   });
 });

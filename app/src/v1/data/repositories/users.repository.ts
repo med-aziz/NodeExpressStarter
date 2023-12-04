@@ -66,6 +66,7 @@ export const usersRepoBase = (dbConnection: DataSource | QueryRunner) => ({
       last_name: payload.lastName,
       confirmation_token: payload.confirmationToken,
       picture: payload.picture,
+      username: payload.username,
     });
     const result = await this.manager.save(UserEntity, user);
     return this.toDomainUser(result);
