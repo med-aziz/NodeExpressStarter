@@ -8,7 +8,7 @@ WORKDIR /app
 
 COPY ../../package.json ./
 
-RUN yarn install
+RUN npm install
 
 COPY ../../ ./
 

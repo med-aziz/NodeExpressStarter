@@ -8,7 +8,7 @@ RUN npm i -g nodemon
 
 COPY ../../package.json ./
 
-RUN yarn install
+RUN npm install
 
 COPY ../../ ./
 
