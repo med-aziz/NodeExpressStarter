@@ -297,8 +297,8 @@ export abstract class ApiFeatures {
     const joinTables: string[] = searchedField.includes('.')
       ? searchedField.split('.').slice(0, -1)
       : defaultPopulate
-      ? [searchedField]
-      : [];
+        ? [searchedField]
+        : [];
     const joinStatements = joinTables.map((table: string, index: number) => {
       // Generate a join statement for each join table, using the table alias and join condition provided in the `joinInfo` object, or defaults to using the table name and "id" field.
 

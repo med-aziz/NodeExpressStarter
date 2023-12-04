@@ -3,24 +3,15 @@ import {
   registerController,
   transactionalRegisterController,
 } from '../../controllers/auth/register.controller';
-import {
-  VALIDATION_PATHS,
-  validateSchemaMiddleware,
-} from '../../middlewares/schemas/validateSchema.middleware';
-import registerSchema from '../../schemas/auth/register.schema';
 import { loginController } from '../../controllers/auth/login.controller';
 import { ControllerType } from '../../../../types/controller';
-import loginSchema from '../../schemas/auth/login.schema';
 import { isRefreshPermissibledMiddleware } from '../../middlewares/auth/isRefreshPermissible.middleware';
 import { refreshTokensController } from '../../controllers/auth/refreshTokens.controller';
 import { requestAccountVerificationController } from '../../controllers/auth/requestAccountVerification.controller';
 import { isVerificationRequestPermissibledMiddleware } from '../../middlewares/auth/isVerificationRequestPermissible';
 import { verifyAccountController } from '../../controllers/auth/verifyAccount.controller';
-import verifyAccountSchema from '../../schemas/auth/verifyAccount.schema';
 import { requestPasswordResetController } from '../../controllers/auth/requestPasswordReset.controller';
-import requestPasswordResetSchema from '../../schemas/auth/requestPasswordReset.schema';
 import { passwordResetController } from '../../controllers/auth/passwordReset.controller';
-import passwordResetSchema from '../../schemas/auth/passwordReset.schema';
 import { isAuthentictedMiddleware } from '../../middlewares/auth/isAuthenticated.middleware';
 import { logoutController } from '../../controllers/auth/logout.controller';
 import { multerImageUpload } from '../../middlewares/uploads/multerUpload.middleware';

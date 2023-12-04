@@ -39,8 +39,8 @@ export const mailUserUseCaseBase =
         ENVIRONMENT === 'production'
           ? user.email
           : MAILING_CONFIG.TEST_EMAIL_RECEIVER === 'ACTUAL_EMAIL'
-          ? user.email
-          : MAILING_CONFIG.TEST_EMAIL_RECEIVER;
+            ? user.email
+            : MAILING_CONFIG.TEST_EMAIL_RECEIVER;
 
       await transporter.sendMail({
         from: MAILING_CONFIG.SENDER,

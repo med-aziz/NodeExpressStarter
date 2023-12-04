@@ -24,20 +24,20 @@ export type FindOptionsSelect<Entity> = {
 export type FindOptionsSelectProperty<Property> = Property extends Promise<infer I>
   ? FindOptionsSelectProperty<I> | boolean
   : Property extends Array<infer I>
-  ? FindOptionsSelectProperty<I> | boolean
-  : Property extends string
-  ? boolean
-  : Property extends number
-  ? boolean
-  : Property extends boolean
-  ? boolean
-  : Property extends Buffer
-  ? boolean
-  : Property extends Date
-  ? boolean
-  : Property extends object
-  ? FindOptionsSelect<Property>
-  : boolean;
+    ? FindOptionsSelectProperty<I> | boolean
+    : Property extends string
+      ? boolean
+      : Property extends number
+        ? boolean
+        : Property extends boolean
+          ? boolean
+          : Property extends Buffer
+            ? boolean
+            : Property extends Date
+              ? boolean
+              : Property extends object
+                ? FindOptionsSelect<Property>
+                : boolean;
 export type FindOptionsSelectByString<Entity> = (keyof Entity)[];
 export type FindOptionsWhere<Entity> = {
   [P in keyof Entity]?: P extends 'toString'
@@ -51,34 +51,34 @@ export type FindOptionsWhereProperty<
 > = PropertyToBeNarrowed extends Promise<infer I>
   ? FindOptionsWhereProperty<NonNullable<I>>
   : PropertyToBeNarrowed extends Array<infer I>
-  ? FindOptionsWhereProperty<NonNullable<I>>
-  : PropertyToBeNarrowed extends Buffer
-  ? Property | FindOperator<Property>
-  : PropertyToBeNarrowed extends Date
-  ? Property | FindOperator<Property>
-  : PropertyToBeNarrowed extends string
-  ? Property | FindOperator<Property>
-  : PropertyToBeNarrowed extends number
-  ? Property | FindOperator<Property>
-  : PropertyToBeNarrowed extends boolean
-  ? Property | FindOperator<Property>
-  : PropertyToBeNarrowed extends object
-  ?
-      | FindOptionsWhere<Property>
-      | FindOptionsWhere<Property>[]
-      | EqualOperator<Property>
-      | FindOperator<any>
-      | boolean
-  : Property | FindOperator<Property>;
+    ? FindOptionsWhereProperty<NonNullable<I>>
+    : PropertyToBeNarrowed extends Buffer
+      ? Property | FindOperator<Property>
+      : PropertyToBeNarrowed extends Date
+        ? Property | FindOperator<Property>
+        : PropertyToBeNarrowed extends string
+          ? Property | FindOperator<Property>
+          : PropertyToBeNarrowed extends number
+            ? Property | FindOperator<Property>
+            : PropertyToBeNarrowed extends boolean
+              ? Property | FindOperator<Property>
+              : PropertyToBeNarrowed extends object
+                ?
+                    | FindOptionsWhere<Property>
+                    | FindOptionsWhere<Property>[]
+                    | EqualOperator<Property>
+                    | FindOperator<any>
+                    | boolean
+                : Property | FindOperator<Property>;
 
 export type FindOptionsWherePropertyNoObject<PropertyToBeNarrowed> =
   PropertyToBeNarrowed extends Promise<infer I>
     ? FindOptionsWhereProperty<NonNullable<I>>
     : PropertyToBeNarrowed extends Array<infer I>
-    ? FindOptionsWhereProperty<NonNullable<I>>
-    : PropertyToBeNarrowed extends infer I
-    ? I
-    : never;
+      ? FindOptionsWhereProperty<NonNullable<I>>
+      : PropertyToBeNarrowed extends infer I
+        ? I
+        : never;
 
 export type FindOptionsRelations<Entity> = {
   [P in keyof Entity]?: P extends 'toString'
@@ -88,20 +88,20 @@ export type FindOptionsRelations<Entity> = {
 export type FindOptionsRelationsProperty<Property> = Property extends Promise<infer I>
   ? FindOptionsRelationsProperty<NonNullable<I>> | boolean
   : Property extends Array<infer I>
-  ? FindOptionsRelationsProperty<NonNullable<I>> | boolean
-  : Property extends string
-  ? never
-  : Property extends number
-  ? never
-  : Property extends boolean
-  ? never
-  : Property extends Buffer
-  ? never
-  : Property extends Date
-  ? never
-  : Property extends object
-  ? FindOptionsRelations<Property> | boolean
-  : boolean;
+    ? FindOptionsRelationsProperty<NonNullable<I>> | boolean
+    : Property extends string
+      ? never
+      : Property extends number
+        ? never
+        : Property extends boolean
+          ? never
+          : Property extends Buffer
+            ? never
+            : Property extends Date
+              ? never
+              : Property extends object
+                ? FindOptionsRelations<Property> | boolean
+                : boolean;
 export type FindOptionsOrder<Entity> = {
   [P in keyof Entity]?: P extends 'toString'
     ? unknown
@@ -122,20 +122,20 @@ export type FindOptionsOrderValue =
 export type FindOptionsOrderProperty<Property> = Property extends Promise<infer I>
   ? FindOptionsOrderProperty<NonNullable<I>>
   : Property extends Array<infer I>
-  ? FindOptionsOrderProperty<NonNullable<I>>
-  : Property extends string
-  ? FindOptionsOrderValue
-  : Property extends number
-  ? FindOptionsOrderValue
-  : Property extends boolean
-  ? FindOptionsOrderValue
-  : Property extends Buffer
-  ? FindOptionsOrderValue
-  : Property extends Date
-  ? FindOptionsOrderValue
-  : Property extends object
-  ? FindOptionsOrder<Property> | FindOptionsOrderValue
-  : FindOptionsOrderValue;
+    ? FindOptionsOrderProperty<NonNullable<I>>
+    : Property extends string
+      ? FindOptionsOrderValue
+      : Property extends number
+        ? FindOptionsOrderValue
+        : Property extends boolean
+          ? FindOptionsOrderValue
+          : Property extends Buffer
+            ? FindOptionsOrderValue
+            : Property extends Date
+              ? FindOptionsOrderValue
+              : Property extends object
+                ? FindOptionsOrder<Property> | FindOptionsOrderValue
+                : FindOptionsOrderValue;
 
 export type findManyType<Entity> = {
   select?: FindOptionsSelect<Entity> | FindOptionsSelectByString<Entity>;
@@ -157,8 +157,8 @@ type _QueryDeepPartialEntity<T> = {
     | (T[P] extends Array<infer U>
         ? Array<_QueryDeepPartialEntity<U>>
         : T[P] extends ReadonlyArray<infer U>
-        ? ReadonlyArray<_QueryDeepPartialEntity<U>>
-        : _QueryDeepPartialEntity<T[P]>)
+          ? ReadonlyArray<_QueryDeepPartialEntity<U>>
+          : _QueryDeepPartialEntity<T[P]>)
     | (() => string);
 };
 export type QueryPartialEntity<T> = {
