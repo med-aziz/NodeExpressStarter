@@ -6,6 +6,7 @@ import { CreateUserTokensUseCaseType, createUserTokensUseCase } from './createUs
 import { exceptionService } from '../../core/errors/exceptions';
 import { validatePayloadSchema } from '../../utils/validation/validate.schema';
 import verifyAccountSchema from '../../presenters/schemas/auth/verifyAccount.schema';
+import { ACCOUNT_VERIFICATION_ERROR_MESSAGE } from '../../domain/auth/errors';
 
 export type VerifyAccountUseCaseType = (
   payload: IVerifyAccountInput,
@@ -30,7 +31,7 @@ export const verifyAccountUseCaseBase =
     if (!userFound) {
       logger.log('VERIFY ACCOUNT USE CASE', `FAILED TOKEN ${payload.code}`);
       exceptionService.badRequestException({
-        message: "Merci d'envoyer le code reçu dans votre email",
+        message: ACCOUNT_VERIFICATION_ERROR_MESSAGE,
       });
     }
 

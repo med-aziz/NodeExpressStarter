@@ -8,6 +8,7 @@ import {
 } from '../api/mailing/sendVerificationMail.usecase';
 import { generateAccountVerificationTokenForUser } from '../../utils/tokenUtils/generateAccountVerificationToken.util';
 import { IRequestUser } from './types/IRequestUser';
+import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE } from '../../domain/auth/errors';
 
 export type RequestAccountVerificationUseCaseType = (
   payload: IRequestUser,
@@ -28,7 +29,7 @@ export const requestAccountVerificationUseCaseBase =
 
     if (!userFound) {
       exceptionService.notFoundException({
-        message: "L'utilisateur n'existe pas",
+        message: ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
       });
     }
 

@@ -6,6 +6,7 @@ import * as nodemailer from 'nodemailer';
 import * as hbs from 'nodemailer-express-handlebars';
 import { Options } from 'nodemailer/lib/mailer';
 import * as path from 'path';
+import { UNKNOWN_MAILING_ERROR_MESSAGE } from '../../../domain/mailing/errors';
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -57,7 +58,7 @@ export const mailUserUseCaseBase =
         logger.error('MAILING', err.message);
       }
       exceptionService.internalException({
-        message: "Erreur lors de l'envoi de l'e-mail de vérification",
+        message: UNKNOWN_MAILING_ERROR_MESSAGE,
       });
     }
   };

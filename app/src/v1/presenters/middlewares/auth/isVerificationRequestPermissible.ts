@@ -4,6 +4,7 @@ import { exceptionService } from '../../../core/errors/exceptions';
 import { Request, Response, NextFunction } from 'express';
 import * as jwtService from 'jsonwebtoken';
 import { validateAccessToken } from './isAuthenticated.middleware';
+import { ACCOUNT_ALREADY_VERIFIED_ERROR_MESSAGE, LOGIN_REQUIRED_ERROR_MESSAGE } from '../../../domain/auth/errors';
 
 export const isVerificationRequestPermissibledMiddleware = (
   req: Request,
@@ -13,7 +14,7 @@ export const isVerificationRequestPermissibledMiddleware = (
   const accessToken = req?.cookies[TOKENS_INFO.ACCESS_TOKEN_COOKIE_NAME];
   if (!accessToken) {
     exceptionService.unauthorizedException({
-      message: "s'il vous plait Connectez-vous d'abord",
+      message: LOGIN_REQUIRED_ERROR_MESSAGE
     });
   }
   const accessTokenPayload = jwtService.verify(accessToken, JWT_KEYS.PUBLIC_KEY, {
@@ -22,7 +23,7 @@ export const isVerificationRequestPermissibledMiddleware = (
   validateAccessToken(accessTokenPayload);
   if (accessTokenPayload.user.isVerified === true) {
     exceptionService.forbiddenException({
-      message: 'ce compte est déjà vérifié',
+      message: ACCOUNT_ALREADY_VERIFIED_ERROR_MESSAGE,
     });
   }
   req.user = accessTokenPayload.user;

@@ -13,6 +13,7 @@ import {
 import { generateResetPasswordToken } from '../../utils/tokenUtils/generateResetPasswordToken.util';
 import { validatePayloadSchema } from '../../utils/validation/validate.schema';
 import requestPasswordResetSchema from '../../presenters/schemas/auth/requestPasswordReset.schema';
+import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE } from '../../domain/auth/errors';
 
 export type RequestPasswordResetUseCaseType = (payload: {
   email: string;
@@ -34,7 +35,7 @@ export const requestPasswordResetUseCaseBase =
 
     if (!userFound) {
       exceptionService.notFoundException({
-        message: "Aucun compte n'existe avec l'e-mail indiqué",
+        message: ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
       });
     }
 

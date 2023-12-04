@@ -8,6 +8,7 @@ import { IUser } from '../../domain/users/user';
 import * as bcryptjs from 'bcryptjs';
 import { validatePayloadSchema } from '../../utils/validation/validate.schema';
 import passwordResetSchema from '../../presenters/schemas/auth/passwordReset.schema';
+import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE, RESET_PASSWORD_EXPIRED_ERROR_MESSAGE, RESET_PASSWORD_UNAUTHORIZED_ERROR_MESSAGE } from '../../domain/auth/errors';
 
 export type PasswordResetPayload = {
   newPassword: string;
@@ -35,17 +36,17 @@ export const passwordResetUseCaseBase =
     if (!passwordResetInformationFound) {
       exceptionService.unauthorizedException({
         message:
-          'Action non autorisée, veuillez utiliser le lien que vous avez reçu dans votre email',
+        RESET_PASSWORD_UNAUTHORIZED_ERROR_MESSAGE
       });
     }
     if (!passwordResetInformationFound.user) {
       exceptionService.badRequestException({
-        message: "Ce compte n'existe plus",
+        message: ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
       });
     }
     if (passwordResetInformationFound.expirationDate < new Date()) {
       exceptionService.badRequestException({
-        message: 'la réinitialisation du mot de passe a expiré',
+        message: RESET_PASSWORD_EXPIRED_ERROR_MESSAGE,
       });
     }
     const salt = bcryptjs.genSaltSync(10);

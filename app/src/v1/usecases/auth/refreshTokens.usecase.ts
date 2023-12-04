@@ -1,5 +1,6 @@
 import { exceptionService } from '../../core/errors/exceptions';
 import { IUsersRepository, usersRepo } from '../../data/repositories/users.repository';
+import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE } from '../../domain/auth/errors';
 import { IUser } from '../../domain/users/user';
 import { createUserAccessToken, createUserRefreshToken } from './createUserTokens.usecase';
 import { IRequestUser } from './types/IRequestUser';
@@ -19,7 +20,7 @@ export const refreshUserTokensUseCaseBase =
     });
     if (!userFound) {
       exceptionService.unauthorizedException({
-        message: "Votre compte n'existe plus",
+        message: ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
       });
     }
     const accessToken = createUserAccessToken(userFound);

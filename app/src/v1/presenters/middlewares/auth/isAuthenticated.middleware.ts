@@ -1,3 +1,4 @@
+import { ACCOUNT_VERIFICATION_REQUIRED_ERROR_MESSAGE, INVALID_TOKEN_ERROR_MESSAGE, LOGIN_REQUIRED_ERROR_MESSAGE } from '../../../domain/auth/errors';
 import { JWT_KEYS, TOKENS_INFO } from '../../../../config';
 import { exceptionService } from '../../../core/errors/exceptions';
 import { IJwtAccessPayload } from '../../../usecases/auth/types/jwt.tokens';
@@ -9,7 +10,7 @@ export const isAuthentictedMiddleware = (req: Request, res: Response, next: Next
     const accessToken = req.cookies[TOKENS_INFO.ACCESS_TOKEN_COOKIE_NAME];
     if (!accessToken) {
       exceptionService.unauthorizedException({
-        message: "s'il vous plait Connectez-vous d'abord",
+        message: LOGIN_REQUIRED_ERROR_MESSAGE,
       });
     }
     const accessTokenPayload = jwtService.verify(accessToken, JWT_KEYS.PUBLIC_KEY, {
@@ -18,13 +19,12 @@ export const isAuthentictedMiddleware = (req: Request, res: Response, next: Next
     validateAccessToken(accessTokenPayload);
     if (accessTokenPayload.user.isVerified !== true) {
       exceptionService.unauthorizedException({
-        message: "veuillez d'abord vérifier votre compte",
+        message: ACCOUNT_VERIFICATION_REQUIRED_ERROR_MESSAGE,
       });
     }
     req.user = accessTokenPayload.user;
     next();
   } catch (err) {
-    // res.clearCookie(TOKENS_INFO.ACCESS_TOKEN_COOKIE_NAME);
     throw err;
   }
 };
@@ -37,7 +37,7 @@ export const isAuthentictedMiddlewareNoVerificationNeeded = (
     const accessToken = req.cookies[TOKENS_INFO.ACCESS_TOKEN_COOKIE_NAME];
     if (!accessToken) {
       exceptionService.unauthorizedException({
-        message: "s'il vous plait Connectez-vous d'abord",
+        message: LOGIN_REQUIRED_ERROR_MESSAGE,
       });
     }
     const accessTokenPayload = jwtService.verify(accessToken, JWT_KEYS.PUBLIC_KEY, {
@@ -47,7 +47,6 @@ export const isAuthentictedMiddlewareNoVerificationNeeded = (
     req.user = accessTokenPayload.user;
     next();
   } catch (err) {
-    // res.clearCookie(TOKENS_INFO.ACCESS_TOKEN_COOKIE_NAME);
     throw err;
   }
 };
@@ -61,6 +60,6 @@ export const validateAccessToken = (tokenPayload: IJwtAccessPayload) => {
     tokenPayload.iss !== TOKENS_INFO.ISSUER ||
     tokenPayload.aud !== TOKENS_INFO.AUDIENCE
   )
-    exceptionService.unauthorizedException({ message: 'access token invalide' });
+    exceptionService.unauthorizedException({ message: INVALID_TOKEN_ERROR_MESSAGE });
   return true;
 };

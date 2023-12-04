@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError, ZodSchema, z } from 'zod';
 import { exceptionService } from '../../../core/errors/exceptions';
+import { INTERNAL_SERVER_ERROR_MESSAGE, VALIDATION_ERROR_MESSAGE } from '../../../utils/validation/validate.schema';
 
 export enum ZODERROR_CODES {
   UNRECOGNIZED_KEYS = 'unrecognized_keys',
@@ -33,13 +34,13 @@ export const validateSchemaMiddleware =
           }
         });
         exceptionService.unprocessabhleEntityException({
-          message: 'Error',
+          message: VALIDATION_ERROR_MESSAGE,
           errors: errorsPayload,
         });
         return errorsPayload;
       }
       exceptionService.internalException({
-        message: 'erreur serveur',
+        message: INTERNAL_SERVER_ERROR_MESSAGE,
       });
     }
   };

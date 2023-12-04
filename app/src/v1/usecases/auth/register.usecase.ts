@@ -10,6 +10,7 @@ import { CreateUserTokensUseCaseType, createUserTokensUseCase } from './createUs
 import { exceptionService } from '../../core/errors/exceptions';
 import { validatePayloadSchema } from '../../utils/validation/validate.schema';
 import registerSchema from '../../presenters/schemas/auth/register.schema';
+import { ACCOUNT_ALREADY_EXISTS_ERROR_MESSAGE } from '../../domain/auth/errors';
 
 export type RegisterUseCase = (
   payload: ICreateUserInput,
@@ -36,7 +37,7 @@ export const registerUseCaseBase =
     });
     if (userFound) {
       exceptionService.badRequestException({
-        message: "Un compte déjà existe avec l'email que vous avez fourni",
+        message: ACCOUNT_ALREADY_EXISTS_ERROR_MESSAGE,
       });
     }
     const salt = bcryptjs.genSaltSync(10);

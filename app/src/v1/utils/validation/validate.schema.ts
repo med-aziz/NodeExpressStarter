@@ -3,6 +3,7 @@ import { exceptionService } from '../../core/errors/exceptions';
 import { ZODERROR_CODES } from '../../presenters/middlewares/schemas/validateSchema.middleware';
 
 export const VALIDATION_ERROR_MESSAGE = "Validation Error"
+export const INTERNAL_SERVER_ERROR_MESSAGE = "Server Error"
 
 export const validatePayloadSchema = (schema: ZodSchema, payload: any) => {
   try {
@@ -22,13 +23,13 @@ export const validatePayloadSchema = (schema: ZodSchema, payload: any) => {
         }
       });
       exceptionService.unprocessabhleEntityException({
-        message: 'Validation Error',
+        message: VALIDATION_ERROR_MESSAGE,
         errors: errorsPayload,
       });
       return errorsPayload;
     }
     exceptionService.internalException({
-      message: 'erreur serveur',
+      message: INTERNAL_SERVER_ERROR_MESSAGE,
     });
   }
 };

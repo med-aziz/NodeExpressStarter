@@ -2,6 +2,7 @@ import { TypeORMError } from 'typeorm';
 import { ApiException } from '../../../core/errors/exceptions';
 import { logger } from '../../../core/logger/logger';
 import { NextFunction, Request, Response } from 'express';
+import { INTERNAL_SERVER_ERROR_MESSAGE, VALIDATION_ERROR_MESSAGE } from '../../../utils/validation/validate.schema';
 
 export const createHandleErrorMiddleware =
   () => (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -17,13 +18,13 @@ export const createHandleErrorMiddleware =
       const ormError = err as any;
       if (ormError.code === 'ER_DUP_ENTRY') {
         return res.status(400).json({
-          error: 'validation error',
+          error: VALIDATION_ERROR_MESSAGE,
           message: 'Cette entité existe déjà.',
         });
       }
     }
     return res.status(500).json({
-      error: 'Internal Server Error',
+      error: INTERNAL_SERVER_ERROR_MESSAGE,
       message: 'erreur serveur',
     });
     next();

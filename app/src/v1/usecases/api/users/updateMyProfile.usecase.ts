@@ -1,3 +1,4 @@
+import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE } from '../../../domain/auth/errors';
 import { exceptionService } from '../../../core/errors/exceptions';
 import { IUsersRepository, usersRepo } from '../../../data/repositories/users.repository';
 import { IUser } from '../../../domain/users/user';
@@ -19,7 +20,7 @@ export const updateMyProfileUseCaseBase =
 
     if (!userFound) {
       exceptionService.notFoundException({
-        message: "Le compte n'est pas trouvé",
+        message: ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
       });
     }
 

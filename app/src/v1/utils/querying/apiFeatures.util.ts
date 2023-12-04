@@ -139,7 +139,7 @@ export abstract class ApiFeatures {
       const [_, field, value] = match;
       if (!searchableFields[field]) {
         exceptionService.notFoundException({
-          message: `Le champ : "${field}" sur lequel vous essayez de filtrer n'est pas autorisé`,
+          message: `Filter : "${field}" IS NOT AUTHORIZED`,
         });
       }
       parsedData[field] = value;

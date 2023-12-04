@@ -7,6 +7,7 @@ import { CreateUserTokensUseCaseType, createUserTokensUseCase } from './createUs
 import { ILoginPayload } from '../../domain/auth/login';
 import { validatePayloadSchema } from '../../utils/validation/validate.schema';
 import loginSchema from '../../presenters/schemas/auth/login.schema';
+import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE, BAD_LOGIN_CREDENTIALS_ERROR_MESSAGE } from '../../domain/auth/errors';
 
 export type LoginUseCaseType = (
   payload: ILoginPayload,
@@ -26,13 +27,13 @@ export const loginUseCaseBase =
     });
     if (!userFound) {
       exceptionService.notFoundException({
-        message: 'mauvais identifiants de connexion',
+        message: ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
       });
     }
     const userPassword = await usersRepo.getUserPassword(userFound);
     if (!bcryptjs.compareSync(loginData.password, userPassword)) {
       exceptionService.badRequestException({
-        message: 'mauvais identifiants de connexion',
+        message: BAD_LOGIN_CREDENTIALS_ERROR_MESSAGE,
       });
     }
     logger.log('LOGIN USE CASE', JSON.stringify(userFound));
