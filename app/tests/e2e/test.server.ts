@@ -3,15 +3,18 @@ import * as cookieParser from 'cookie-parser';
 import getV1AuthRouter from 'app/src/v1/presenters/routes/auth';
 import { loginControllerBase } from 'app/src/v1/presenters/controllers/auth/login.controller';
 import { loginUseCaseBase } from 'app/src/v1/usecases/auth/login.usecase';
-import { IUsersRepository, usersRepoBase } from 'app/src/v1/data/repositories/users.repository';
+import {  usersRepoBase } from 'app/src/v1/data/repositories/users.repository';
 import { createUserTokensUseCase } from 'app/src/v1/usecases/auth/createUserTokens.usecase';
 import { logoutControllerBase } from 'app/src/v1/presenters/controllers/auth/logout.controller';
 import { registerControllerBase } from 'app/src/v1/presenters/controllers/auth/register.controller';
 import { registerUseCaseBase } from 'app/src/v1/usecases/auth/register.usecase';
-import { generateAndSendUserAccountVerificationEmail, requestAccountVerificationUseCaseBase } from 'app/src/v1/usecases/auth/requestAccountVerification.usecase';
+import {
+  generateAndSendUserAccountVerificationEmail,
+  requestAccountVerificationUseCaseBase,
+} from 'app/src/v1/usecases/auth/requestAccountVerification.usecase';
 import { passwordResetControllerBase } from 'app/src/v1/presenters/controllers/auth/passwordReset.controller';
 import { passwordResetUseCaseBase } from 'app/src/v1/usecases/auth/passwordReset.usecase';
-import {  userPasswordResetInformationRepositoryBase } from 'app/src/v1/data/repositories/userPasswordResetInformation.repository';
+import { userPasswordResetInformationRepositoryBase } from 'app/src/v1/data/repositories/userPasswordResetInformation.repository';
 import { refreshTokensControllerBase } from 'app/src/v1/presenters/controllers/auth/refreshTokens.controller';
 import { refreshUserTokensUseCaseBase } from 'app/src/v1/usecases/auth/refreshTokens.usecase';
 import { requestPasswordResetControllerBase } from 'app/src/v1/presenters/controllers/auth/requestPasswordReset.controller';
@@ -44,44 +47,65 @@ server.use(function (req: express.Request, res: express.Response, next: express.
   }
 });
 server.use(express.json());
-// server.use(cookieParser());
+server.use(cookieParser());
 server.use(requestInterceptor);
 server.use(responseInterceptor);
-server.use('/v1/auth', getV1AuthRouter({
-    loginController: loginControllerBase(loginUseCaseBase({
-        usersRepo: usersRepoBase(testDataSource),
-        createUserTokensUseCase:createUserTokensUseCase
-    })),
-    logoutController: logoutControllerBase(),
-    registerController: testTransactionalController((tx) => registerControllerBase(registerUseCaseBase({
+server.use(
+  '/v1/auth',
+  getV1AuthRouter({
+    loginController: loginControllerBase(
+      loginUseCaseBase({
         usersRepo: usersRepoBase(testDataSource),
         createUserTokensUseCase: createUserTokensUseCase,
-        generateAndSendUserAccountVerificationEmail: async (user: IUser, usersRepo: IUsersRepository) => {
-            console.log(`SENDING EMAIL TO USER ${user}`)
-            return ""
-        }
-    }))) ,
-    passwordResetController: passwordResetControllerBase(passwordResetUseCaseBase({
+      }),
+    ),
+    logoutController: logoutControllerBase(),
+    registerController: testTransactionalController((tx) =>
+      registerControllerBase(
+        registerUseCaseBase({
+          usersRepo: usersRepoBase(tx),
+          createUserTokensUseCase: createUserTokensUseCase,
+          generateAndSendUserAccountVerificationEmail: async (user: IUser) => {
+            console.log(`SENDING EMAIL TO USER ${user}`);
+            return '';
+          },
+        }),
+      ),
+    ),
+    passwordResetController: passwordResetControllerBase(
+      passwordResetUseCaseBase({
         usersRepo: usersRepoBase(testDataSource),
-        userPasswordResetInformationsRepo: userPasswordResetInformationRepositoryBase(testDataSource)
-    })),
-    refreshTokensController: refreshTokensControllerBase(refreshUserTokensUseCaseBase({
-        usersRepo: usersRepoBase(testDataSource)
-    })),
-    requestPasswordResetController: requestPasswordResetControllerBase(requestPasswordResetUseCaseBase({
+        userPasswordResetInformationsRepo:
+          userPasswordResetInformationRepositoryBase(testDataSource),
+      }),
+    ),
+    refreshTokensController: refreshTokensControllerBase(
+      refreshUserTokensUseCaseBase({
+        usersRepo: usersRepoBase(testDataSource),
+      }),
+    ),
+    requestPasswordResetController: requestPasswordResetControllerBase(
+      requestPasswordResetUseCaseBase({
         usersRepo: usersRepoBase(testDataSource),
         sendUserPasswordResetMailUseCase: sendUserVerificationMailUseCase,
-        userPasswordResetInformationsRepo: userPasswordResetInformationRepositoryBase(testDataSource)
-    })),
-    requestUserAccountVerificationController: requestAccountVerificationControllerBase(requestAccountVerificationUseCaseBase({
+        userPasswordResetInformationsRepo:
+          userPasswordResetInformationRepositoryBase(testDataSource),
+      }),
+    ),
+    requestUserAccountVerificationController: requestAccountVerificationControllerBase(
+      requestAccountVerificationUseCaseBase({
         usersRepo: usersRepoBase(testDataSource),
-        generateAndSendUserAccountVerificationEmail: generateAndSendUserAccountVerificationEmail
-    })),
-    verifyAccountController: verifyAccountControllerBase(verifyAccountUseCaseBase({
+        generateAndSendUserAccountVerificationEmail: generateAndSendUserAccountVerificationEmail,
+      }),
+    ),
+    verifyAccountController: verifyAccountControllerBase(
+      verifyAccountUseCaseBase({
         usersRepo: usersRepoBase(testDataSource),
-        createUserTokensUseCase: createUserTokensUseCase
-    }))
-}));
+        createUserTokensUseCase: createUserTokensUseCase,
+      }),
+    ),
+  }),
+);
 server.use(handleErrorMiddleware);
 
 export default server;

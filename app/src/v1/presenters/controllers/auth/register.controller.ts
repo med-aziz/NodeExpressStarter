@@ -6,14 +6,13 @@ import {
 import { Request, Response } from 'express';
 import { transactionalController } from '../../middlewares/controllers/transactional.controller';
 import { usersRepoBase } from '../../../data/repositories/users.repository';
-import { generateAndSendUserAccountVerificationEmail, requestAccountVerificationUseCaseBase } from '../../../usecases/auth/requestAccountVerification.usecase';
-import { sendUserVerificationMailUseCase } from '../../../usecases/api/mailing/sendVerificationMail.usecase';
+import { generateAndSendUserAccountVerificationEmail } from '../../../usecases/auth/requestAccountVerification.usecase';
 import { createUserTokensUseCase } from '../../../usecases/auth/createUserTokens.usecase';
 import { TOKENS_INFO } from '../../../../config';
 
 const registerControllerBase =
   (registerUserCase: RegisterUseCase) => async (req: Request, res: Response) => {
-    console.log("IN REGISTER CONTROLLER")
+    console.log('IN REGISTER CONTROLLER');
     const result = await registerUserCase(req?.body);
     res.cookie(TOKENS_INFO.REFRESH_TOKEN_COOKIE_NAME, result.refreshToken, {
       sameSite: 'none',
@@ -27,7 +26,7 @@ const registerControllerBase =
       secure: true,
       maxAge: TOKENS_INFO.ACCESS_TOKEN_EXPIRATION_IN_MILLISECONDS,
     });
-    console.log("RETURNING RESPONSE FROM CONTROLLER")
+    console.log('RETURNING RESPONSE FROM CONTROLLER');
     return res.status(201).json({
       message: 'inscrit avec succès',
       data: {

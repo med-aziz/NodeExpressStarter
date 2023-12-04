@@ -2,8 +2,8 @@ import { ZodError, ZodSchema } from 'zod';
 import { exceptionService } from '../../core/errors/exceptions';
 import { ZODERROR_CODES } from '../../presenters/middlewares/schemas/validateSchema.middleware';
 
-export const VALIDATION_ERROR_MESSAGE = "Validation Error"
-export const INTERNAL_SERVER_ERROR_MESSAGE = "Server Error"
+export const VALIDATION_ERROR_MESSAGE = 'Validation Error';
+export const INTERNAL_SERVER_ERROR_MESSAGE = 'Server Error';
 
 export const validatePayloadSchema = (schema: ZodSchema, payload: any) => {
   try {

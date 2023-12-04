@@ -2,9 +2,7 @@ import { logger } from '../../core/logger/logger';
 import { IUsersRepository, usersRepo } from '../../data/repositories/users.repository';
 import * as bcryptjs from 'bcryptjs';
 import { ICreateUserInput, IUser } from '../../domain/users/user';
-import {
-  generateAndSendUserAccountVerificationEmail,
-} from './requestAccountVerification.usecase';
+import { generateAndSendUserAccountVerificationEmail } from './requestAccountVerification.usecase';
 import { CreateUserTokensUseCaseType, createUserTokensUseCase } from './createUserTokens.usecase';
 import { exceptionService } from '../../core/errors/exceptions';
 import { validatePayloadSchema } from '../../utils/validation/validate.schema';
@@ -28,7 +26,7 @@ export const registerUseCaseBase =
     },
   ): RegisterUseCase =>
   async (payload: ICreateUserInput) => {
-    console.log("IN REGISTER USECASE")
+    console.log('IN REGISTER USECASE');
     validateRegisterPayload(payload);
     const userFound = await dependencies.usersRepo.findOne({
       where: {
@@ -52,7 +50,10 @@ export const registerUseCaseBase =
       picture: payload.picture,
     });
     logger.log('REGISTER USE CASE', JSON.stringify(userCreated));
-    await dependencies.generateAndSendUserAccountVerificationEmail(userCreated, dependencies.usersRepo);
+    await dependencies.generateAndSendUserAccountVerificationEmail(
+      userCreated,
+      dependencies.usersRepo,
+    );
     const tokens = await dependencies.createUserTokensUseCase(userCreated);
     return {
       user: userCreated,
@@ -61,7 +62,7 @@ export const registerUseCaseBase =
   };
 
 export function validateRegisterPayload(payload: ICreateUserInput): boolean {
-  console.log("VALIDATING REGISTER PAYLOAD")
+  console.log('VALIDATING REGISTER PAYLOAD');
   validatePayloadSchema(registerSchema, payload);
   return true;
 }

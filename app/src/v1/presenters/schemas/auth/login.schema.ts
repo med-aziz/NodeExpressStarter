@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import { ZodValidationMessageCommon } from '../utils/commonErrorMessage';
-import { INVALID_EMAIL_ERROR_MESSAGE, INVALID_PASSWORD_ERROR_MESSAGE } from '../../../domain/auth/errors';
+import {
+  INVALID_EMAIL_ERROR_MESSAGE,
+  INVALID_PASSWORD_ERROR_MESSAGE,
+} from '../../../domain/auth/errors';
 
 const loginSchema = z
   .object({

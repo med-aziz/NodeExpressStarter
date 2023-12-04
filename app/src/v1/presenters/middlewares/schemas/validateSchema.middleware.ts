@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError, ZodSchema, z } from 'zod';
 import { exceptionService } from '../../../core/errors/exceptions';
-import { INTERNAL_SERVER_ERROR_MESSAGE, VALIDATION_ERROR_MESSAGE } from '../../../utils/validation/validate.schema';
+import {
+  INTERNAL_SERVER_ERROR_MESSAGE,
+  VALIDATION_ERROR_MESSAGE,
+} from '../../../utils/validation/validate.schema';
 
 export enum ZODERROR_CODES {
   UNRECOGNIZED_KEYS = 'unrecognized_keys',

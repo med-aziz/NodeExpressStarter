@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import { ZodValidationMessageCommon } from '../utils/commonErrorMessage';
-import { INVALID_PASSWORD_ERROR_MESSAGE, PASSWORD_TOO_SHORT_ERROR_MESSAGE } from '../../../domain/auth/errors';
+import {
+  INVALID_PASSWORD_ERROR_MESSAGE,
+  PASSWORD_TOO_SHORT_ERROR_MESSAGE,
+} from '../../../domain/auth/errors';
 
 const passwordResetSchema = z
   .object({

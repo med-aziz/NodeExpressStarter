@@ -1,4 +1,8 @@
-import { ACCOUNT_VERIFICATION_REQUIRED_ERROR_MESSAGE, INVALID_TOKEN_ERROR_MESSAGE, LOGIN_REQUIRED_ERROR_MESSAGE } from '../../../domain/auth/errors';
+import {
+  ACCOUNT_VERIFICATION_REQUIRED_ERROR_MESSAGE,
+  INVALID_TOKEN_ERROR_MESSAGE,
+  LOGIN_REQUIRED_ERROR_MESSAGE,
+} from '../../../domain/auth/errors';
 import { JWT_KEYS, TOKENS_INFO } from '../../../../config';
 import { exceptionService } from '../../../core/errors/exceptions';
 import { IJwtAccessPayload } from '../../../usecases/auth/types/jwt.tokens';

@@ -1,7 +1,5 @@
 import { Router } from 'express';
-import {
-  transactionalRegisterController,
-} from '../../controllers/auth/register.controller';
+import { transactionalRegisterController } from '../../controllers/auth/register.controller';
 import { loginController } from '../../controllers/auth/login.controller';
 import { ControllerType } from '../../../../types/controller';
 import { isRefreshPermissibledMiddleware } from '../../middlewares/auth/isRefreshPermissible.middleware';

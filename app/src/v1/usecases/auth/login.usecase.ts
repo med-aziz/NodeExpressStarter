@@ -7,7 +7,10 @@ import { CreateUserTokensUseCaseType, createUserTokensUseCase } from './createUs
 import { ILoginPayload } from '../../domain/auth/login';
 import { validatePayloadSchema } from '../../utils/validation/validate.schema';
 import loginSchema from '../../presenters/schemas/auth/login.schema';
-import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE, BAD_LOGIN_CREDENTIALS_ERROR_MESSAGE } from '../../domain/auth/errors';
+import {
+  ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
+  BAD_LOGIN_CREDENTIALS_ERROR_MESSAGE,
+} from '../../domain/auth/errors';
 
 export type LoginUseCaseType = (
   payload: ILoginPayload,

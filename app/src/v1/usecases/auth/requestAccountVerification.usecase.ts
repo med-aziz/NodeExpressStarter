@@ -2,9 +2,7 @@ import { FRONT_END_BASE_URL } from '../../../config';
 import { exceptionService } from '../../core/errors/exceptions';
 import { IUsersRepository, usersRepo } from '../../data/repositories/users.repository';
 import { IUser } from '../../domain/users/user';
-import {
-  sendUserVerificationMailUseCase,
-} from '../api/mailing/sendVerificationMail.usecase';
+import { sendUserVerificationMailUseCase } from '../api/mailing/sendVerificationMail.usecase';
 import { generateAccountVerificationTokenForUser } from '../../utils/tokenUtils/generateAccountVerificationToken.util';
 import { IRequestUser } from './types/IRequestUser';
 import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE } from '../../domain/auth/errors';
@@ -16,7 +14,10 @@ export type RequestAccountVerificationUseCaseType = (
 export const requestAccountVerificationUseCaseBase =
   (dependencies: {
     usersRepo: IUsersRepository;
-    generateAndSendUserAccountVerificationEmail: (user: IUser, usersRepo: IUsersRepository) => Promise<string>;
+    generateAndSendUserAccountVerificationEmail: (
+      user: IUser,
+      usersRepo: IUsersRepository,
+    ) => Promise<string>;
   }) =>
   async (user: IRequestUser) => {
     const userFound = await dependencies.usersRepo.findOne({
@@ -32,14 +33,20 @@ export const requestAccountVerificationUseCaseBase =
       });
     }
 
-    await dependencies.generateAndSendUserAccountVerificationEmail(userFound, dependencies.usersRepo)
-   
+    await dependencies.generateAndSendUserAccountVerificationEmail(
+      userFound,
+      dependencies.usersRepo,
+    );
+
     return {
       user: userFound,
     };
   };
-  
-export async function generateAndSendUserAccountVerificationEmail(user: IUser, usersRepo: IUsersRepository) : Promise<string>  {
+
+export async function generateAndSendUserAccountVerificationEmail(
+  user: IUser,
+  usersRepo: IUsersRepository,
+): Promise<string> {
   const verificationToken = generateAccountVerificationTokenForUser(user);
 
   await usersRepo.updateOne(user, {
@@ -52,7 +59,7 @@ export async function generateAndSendUserAccountVerificationEmail(user: IUser, u
     link: link,
   });
 
-  return link
+  return link;
 }
 
 export const requestAccountVerificationUseCase: RequestAccountVerificationUseCaseType =

@@ -8,7 +8,11 @@ import { IUser } from '../../domain/users/user';
 import * as bcryptjs from 'bcryptjs';
 import { validatePayloadSchema } from '../../utils/validation/validate.schema';
 import passwordResetSchema from '../../presenters/schemas/auth/passwordReset.schema';
-import { ACCOUNT_NOT_FOUND_ERROR_MESSAGE, RESET_PASSWORD_EXPIRED_ERROR_MESSAGE, RESET_PASSWORD_UNAUTHORIZED_ERROR_MESSAGE } from '../../domain/auth/errors';
+import {
+  ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
+  RESET_PASSWORD_EXPIRED_ERROR_MESSAGE,
+  RESET_PASSWORD_UNAUTHORIZED_ERROR_MESSAGE,
+} from '../../domain/auth/errors';
 
 export type PasswordResetPayload = {
   newPassword: string;
@@ -35,8 +39,7 @@ export const passwordResetUseCaseBase =
       });
     if (!passwordResetInformationFound) {
       exceptionService.unauthorizedException({
-        message:
-        RESET_PASSWORD_UNAUTHORIZED_ERROR_MESSAGE
+        message: RESET_PASSWORD_UNAUTHORIZED_ERROR_MESSAGE,
       });
     }
     if (!passwordResetInformationFound.user) {

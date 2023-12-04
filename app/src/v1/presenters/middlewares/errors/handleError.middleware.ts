@@ -2,11 +2,14 @@ import { TypeORMError } from 'typeorm';
 import { ApiException } from '../../../core/errors/exceptions';
 import { logger } from '../../../core/logger/logger';
 import { NextFunction, Request, Response } from 'express';
-import { INTERNAL_SERVER_ERROR_MESSAGE, VALIDATION_ERROR_MESSAGE } from '../../../utils/validation/validate.schema';
+import {
+  INTERNAL_SERVER_ERROR_MESSAGE,
+  VALIDATION_ERROR_MESSAGE,
+} from '../../../utils/validation/validate.schema';
 
 export const createHandleErrorMiddleware =
   () => (err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.log("IN ERROR MIDDLEWARE BRUH ", err)
+    console.log('IN ERROR MIDDLEWARE BRUH ', err);
     logger.error('ERROR', err.message, err.stack);
     if (err instanceof ApiException) {
       return res.status(err.status).json({
