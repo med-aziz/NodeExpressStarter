@@ -26,8 +26,8 @@ jobs:
       - name: Install Dependencies
         run: yarn install
       - name: 'lint'
-        run: npm run lint
+        run: yarn run lint
       - name: 'build'
-        run: npm run build
+        run: yarn run build
       - name: 'test'
-        run: npm run jest-test
+        run: yarn run jest-test
