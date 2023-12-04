@@ -1,7 +1,7 @@
 import { validateLoginPaylod } from "app/src/v1/usecases/auth/login.usecase";
 import { VALIDATION_ERROR_MESSAGE } from "app/src/v1/utils/validation/validate.schema";
 
-const loginPayloads: Array<{ payload: any; err: boolean }> = [
+const loginTestData: Array<{ payload: any; err: boolean }> = [
     {
       payload: {
         email: 'notemail',
@@ -32,8 +32,8 @@ const loginPayloads: Array<{ payload: any; err: boolean }> = [
     },
   ];
   
-  describe('LOGIN USER', () => {
-    for (const data of loginPayloads) {
+  describe('LOGIN USER PAYLOADS TESTS', () => {
+    for (const data of loginTestData) {
       if (data.err) {
         it('SHOULD RETURN AN ERROR', () => {
           expect(() => {

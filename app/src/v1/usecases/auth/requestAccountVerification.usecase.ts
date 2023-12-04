@@ -3,7 +3,6 @@ import { exceptionService } from '../../core/errors/exceptions';
 import { IUsersRepository, usersRepo } from '../../data/repositories/users.repository';
 import { IUser } from '../../domain/users/user';
 import {
-  MailUserAccountVerificationUseCaseType,
   sendUserVerificationMailUseCase,
 } from '../api/mailing/sendVerificationMail.usecase';
 import { generateAccountVerificationTokenForUser } from '../../utils/tokenUtils/generateAccountVerificationToken.util';
@@ -17,7 +16,7 @@ export type RequestAccountVerificationUseCaseType = (
 export const requestAccountVerificationUseCaseBase =
   (dependencies: {
     usersRepo: IUsersRepository;
-    sendUserAccountVerification: MailUserAccountVerificationUseCaseType;
+    generateAndSendUserAccountVerificationEmail: (user: IUser, usersRepo: IUsersRepository) => Promise<string>;
   }) =>
   async (user: IRequestUser) => {
     const userFound = await dependencies.usersRepo.findOne({
@@ -33,24 +32,31 @@ export const requestAccountVerificationUseCaseBase =
       });
     }
 
-    const verificationToken = generateAccountVerificationTokenForUser(userFound);
-
-    await dependencies.usersRepo.updateOne(userFound, {
-      confirmation_token: verificationToken,
-    });
-
-    const link = `${FRONT_END_BASE_URL}/verify-account/${verificationToken}`;
-
-    await dependencies.sendUserAccountVerification(userFound, {
-      link: link,
-    });
+    await dependencies.generateAndSendUserAccountVerificationEmail(userFound, dependencies.usersRepo)
+   
     return {
       user: userFound,
     };
   };
+  
+export async function generateAndSendUserAccountVerificationEmail(user: IUser, usersRepo: IUsersRepository) : Promise<string>  {
+  const verificationToken = generateAccountVerificationTokenForUser(user);
+
+  await usersRepo.updateOne(user, {
+    confirmation_token: verificationToken,
+  });
+
+  const link = `${FRONT_END_BASE_URL}/verify-account/${verificationToken}`;
+
+  await sendUserVerificationMailUseCase(user, {
+    link: link,
+  });
+
+  return link
+}
 
 export const requestAccountVerificationUseCase: RequestAccountVerificationUseCaseType =
   requestAccountVerificationUseCaseBase({
     usersRepo,
-    sendUserAccountVerification: sendUserVerificationMailUseCase,
+    generateAndSendUserAccountVerificationEmail: generateAndSendUserAccountVerificationEmail,
   });

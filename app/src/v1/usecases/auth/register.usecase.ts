@@ -3,8 +3,7 @@ import { IUsersRepository, usersRepo } from '../../data/repositories/users.repos
 import * as bcryptjs from 'bcryptjs';
 import { ICreateUserInput, IUser } from '../../domain/users/user';
 import {
-  RequestAccountVerificationUseCaseType,
-  requestAccountVerificationUseCase,
+  generateAndSendUserAccountVerificationEmail,
 } from './requestAccountVerification.usecase';
 import { CreateUserTokensUseCaseType, createUserTokensUseCase } from './createUserTokens.usecase';
 import { exceptionService } from '../../core/errors/exceptions';
@@ -20,11 +19,11 @@ export const registerUseCaseBase =
   (
     dependencies: {
       usersRepo: IUsersRepository;
-      requestAccountVerificationUseCase: RequestAccountVerificationUseCaseType;
+      generateAndSendUserAccountVerificationEmail: typeof generateAndSendUserAccountVerificationEmail;
       createUserTokensUseCase: CreateUserTokensUseCaseType;
     } = {
       usersRepo: usersRepo,
-      requestAccountVerificationUseCase: requestAccountVerificationUseCase,
+      generateAndSendUserAccountVerificationEmail: generateAndSendUserAccountVerificationEmail,
       createUserTokensUseCase: createUserTokensUseCase,
     },
   ): RegisterUseCase =>
@@ -52,11 +51,7 @@ export const registerUseCaseBase =
       picture: payload.picture,
     });
     logger.log('REGISTER USE CASE', JSON.stringify(userCreated));
-    await dependencies.requestAccountVerificationUseCase({
-      email: payload.email,
-      isVerified: false,
-      id: userCreated.id,
-    });
+    await dependencies.generateAndSendUserAccountVerificationEmail(userCreated, dependencies.usersRepo);
     const tokens = await dependencies.createUserTokensUseCase(userCreated);
     return {
       user: userCreated,
@@ -71,6 +66,6 @@ export function validateRegisterPayload(payload: ICreateUserInput): boolean {
 
 export const registerUseCase: RegisterUseCase = registerUseCaseBase({
   usersRepo,
-  requestAccountVerificationUseCase: requestAccountVerificationUseCase,
+  generateAndSendUserAccountVerificationEmail: generateAndSendUserAccountVerificationEmail,
   createUserTokensUseCase: createUserTokensUseCase,
 });

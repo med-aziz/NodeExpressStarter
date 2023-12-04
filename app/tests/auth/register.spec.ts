@@ -54,7 +54,7 @@ const registerTestData: Array<{ payload: any; err: boolean }> = [
   },
 ];
 
-describe('RESIGTER USER PAYLOAD', () => {
+describe('RESIGTER USER PAYLOADS TESTS', () => {
   for (const data of registerTestData) {
     if (data.err) {
       it('SHOULD RETURN AN ERROR', () => {
