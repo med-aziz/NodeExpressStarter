@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { ZodValidationMessageCommon } from '../utils/commonErrorMessage';
 import {
   FIRST_NAME_TOO_SHORT_ERROR_MESSAGE,
   INVALID_EMAIL_ERROR_MESSAGE,
   LAST_NAME_TOO_SHORT_ERROR_MESSAGE,
 } from '../../../domain/auth/errors';
+import { ZodValidationMessageCommon } from '../errors.common';
 
 const updateProfileSchema = z
   .object({

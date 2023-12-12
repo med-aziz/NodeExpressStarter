@@ -1,9 +1,18 @@
 import { ACCOUNT_ALREADY_EXISTS_ERROR_MESSAGE } from 'app/src/v1/domain/auth/errors';
-import testDataSource from '../test.db.connection';
-import testserver from '../test.server';
 import * as request from 'supertest';
+import { createTestApp } from '../test.server';
+import { databaseNames, setup } from '../jest.setup';
+import { getTestDatasource } from '../test.db.connection';
+import { DataSource } from 'typeorm';
+import * as express from 'express';
+
+let testDataSource: DataSource = null;
+let testserver: express.Express = null;
 
 beforeAll(async () => {
+  await setup(databaseNames.register);
+  testDataSource = getTestDatasource(databaseNames.register);
+  testserver = createTestApp(testDataSource);
   await testDataSource.initialize();
 });
 afterAll(async () => {

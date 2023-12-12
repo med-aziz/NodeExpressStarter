@@ -1,7 +1,7 @@
 import { validateRegisterPayload } from 'app/src/v1/usecases/auth/register.usecase';
 import { VALIDATION_ERROR_MESSAGE } from 'app/src/v1/utils/validation/validate.schema';
 
-const registerTestData: Array<{ payload: any; err: boolean }> = [
+const registerTestData: Array<{ payload: any; err: boolean; expectedRetun?: any }> = [
   {
     payload: {
       email: 'notemail',
@@ -73,6 +73,12 @@ const registerTestData: Array<{ payload: any; err: boolean }> = [
       picture: '',
     },
     err: false,
+    expectedRetun: {
+      email: 'notemail@gmail.com',
+      firstName: 'firstname',
+      lastName: 'lastname',
+      username: 'testusername',
+    },
   },
 ];
 
@@ -87,7 +93,9 @@ describe('RESIGTER USER PAYLOADS TESTS', () => {
     } else {
       it('SHOULD SUCCEED', () => {
         const result = validateRegisterPayload(data.payload);
-        expect(result).toEqual(true);
+        Object.keys(data.expectedRetun).forEach((key: string) => {
+          expect(result[key]).toEqual(data.expectedRetun[key]);
+        });
       });
     }
   }

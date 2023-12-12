@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { ZodValidationMessageCommon } from '../utils/commonErrorMessage';
 import { INVALID_ACCOUNT_VERIFICATION_CODE_ERROR_MESSAGE } from '../../../domain/auth/errors';
+import { ZodValidationMessageCommon } from '../errors.common';
 
 const verifyAccountSchema = z
   .object({

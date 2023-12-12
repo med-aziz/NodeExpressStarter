@@ -5,7 +5,19 @@ import { ZODERROR_CODES } from '../../presenters/middlewares/schemas/validateSch
 export const VALIDATION_ERROR_MESSAGE = 'Validation Error';
 export const INTERNAL_SERVER_ERROR_MESSAGE = 'Server Error';
 
-export const validatePayloadSchema = (schema: ZodSchema, payload: any) => {
+export const trimAndValidateSchemaPayload = <T>(schema: ZodSchema, payload: T) => {
+  const trimmedPayload = trimStringValues<T>(payload);
+  validatePayloadSchema<T>(schema, trimmedPayload);
+  return trimmedPayload;
+};
+
+export const trimStringValues = <T>(data: T) => {
+  return Object.entries(data).reduce((acc, [key, value]) => {
+    acc[key] = typeof value === 'string' ? value?.trim() : value;
+    return acc;
+  }, {} as T);
+};
+export const validatePayloadSchema = <T>(schema: ZodSchema, payload: T) => {
   try {
     schema.parse(payload) as any;
   } catch (err: any) {

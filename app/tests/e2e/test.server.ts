@@ -23,89 +23,91 @@ import { sendUserVerificationMailUseCase } from 'app/src/v1/usecases/api/mailing
 import { requestAccountVerificationControllerBase } from 'app/src/v1/presenters/controllers/auth/requestAccountVerification.controller';
 import { verifyAccountControllerBase } from 'app/src/v1/presenters/controllers/auth/verifyAccount.controller';
 import { verifyAccountUseCaseBase } from 'app/src/v1/usecases/auth/verifyAccount.usecase';
-import testDataSource from './test.db.connection';
 import { requestInterceptor } from 'app/src/v1/presenters/middlewares/interceptors/request.interceptor';
 import { responseInterceptor } from 'app/src/v1/presenters/middlewares/interceptors/response.interceptor';
 import { handleErrorMiddleware } from 'app/src/v1/presenters/middlewares/errors/handleError.middleware';
 import { IUser } from 'app/src/v1/domain/users/user';
-import { testTransactionalController } from './test.transactional.controller';
+import { makeTransactionalController } from 'app/src/v1/presenters/middlewares/controllers/transactional.controller';
+import { DataSource } from 'typeorm';
 
-const server = express();
-const allowedOrigins = ['https://www.dev.tresovista.laxmi.cloud', 'http://localhost:3000'];
-server.use(function (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
-server.use(express.json());
-server.use(cookieParser());
-server.use(requestInterceptor);
-server.use(responseInterceptor);
-server.use(
-  '/v1/auth',
-  getV1AuthRouter({
-    loginController: loginControllerBase(
-      loginUseCaseBase({
-        usersRepo: usersRepoBase(testDataSource),
-        createUserTokensUseCase: createUserTokensUseCase,
-      }),
-    ),
-    logoutController: logoutControllerBase(),
-    registerController: testTransactionalController((tx) =>
-      registerControllerBase(
-        registerUseCaseBase({
-          usersRepo: usersRepoBase(tx),
+export function createTestApp(testDataSource: DataSource) {
+  const server = express();
+  const allowedOrigins = ['https://www.dev.tresovista.laxmi.cloud', 'http://localhost:3000'];
+  server.use(function (req: express.Request, res: express.Response, next: express.NextFunction) {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    if (req.method === 'OPTIONS') {
+      res.sendStatus(200);
+    } else {
+      next();
+    }
+  });
+  server.use(express.json());
+  server.use(cookieParser());
+  server.use(requestInterceptor);
+  server.use(responseInterceptor);
+  server.use(
+    '/v1/auth',
+    getV1AuthRouter({
+      loginController: loginControllerBase(
+        loginUseCaseBase({
+          usersRepo: usersRepoBase(testDataSource),
           createUserTokensUseCase: createUserTokensUseCase,
-          generateAndSendUserAccountVerificationEmail: async (user: IUser) => {
-            console.log(`GENERATE AND SEND FOR USER ${user}`);
-            return '';
-          },
         }),
       ),
-    ),
-    passwordResetController: passwordResetControllerBase(
-      passwordResetUseCaseBase({
-        usersRepo: usersRepoBase(testDataSource),
-        userPasswordResetInformationsRepo:
-          userPasswordResetInformationRepositoryBase(testDataSource),
-      }),
-    ),
-    refreshTokensController: refreshTokensControllerBase(
-      refreshUserTokensUseCaseBase({
-        usersRepo: usersRepoBase(testDataSource),
-      }),
-    ),
-    requestPasswordResetController: requestPasswordResetControllerBase(
-      requestPasswordResetUseCaseBase({
-        usersRepo: usersRepoBase(testDataSource),
-        sendUserPasswordResetMailUseCase: sendUserVerificationMailUseCase,
-        userPasswordResetInformationsRepo:
-          userPasswordResetInformationRepositoryBase(testDataSource),
-      }),
-    ),
-    requestUserAccountVerificationController: requestAccountVerificationControllerBase(
-      requestAccountVerificationUseCaseBase({
-        usersRepo: usersRepoBase(testDataSource),
-        generateAndSendUserAccountVerificationEmail: generateAndSendUserAccountVerificationEmail,
-      }),
-    ),
-    verifyAccountController: verifyAccountControllerBase(
-      verifyAccountUseCaseBase({
-        usersRepo: usersRepoBase(testDataSource),
-        createUserTokensUseCase: createUserTokensUseCase,
-      }),
-    ),
-  }),
-);
-server.use(handleErrorMiddleware);
+      logoutController: logoutControllerBase(),
+      registerController: makeTransactionalController(testDataSource)((tx) =>
+        registerControllerBase(
+          registerUseCaseBase({
+            usersRepo: usersRepoBase(tx),
+            createUserTokensUseCase: createUserTokensUseCase,
+            generateAndSendUserAccountVerificationEmail: async (user: IUser) => {
+              console.log(`GENERATE AND SEND FOR USER ${user}`);
+              return '';
+            },
+          }),
+        ),
+      ),
+      passwordResetController: passwordResetControllerBase(
+        passwordResetUseCaseBase({
+          usersRepo: usersRepoBase(testDataSource),
+          userPasswordResetInformationsRepo:
+            userPasswordResetInformationRepositoryBase(testDataSource),
+        }),
+      ),
+      refreshTokensController: refreshTokensControllerBase(
+        refreshUserTokensUseCaseBase({
+          usersRepo: usersRepoBase(testDataSource),
+        }),
+      ),
+      requestPasswordResetController: requestPasswordResetControllerBase(
+        requestPasswordResetUseCaseBase({
+          usersRepo: usersRepoBase(testDataSource),
+          sendUserPasswordResetMailUseCase: sendUserVerificationMailUseCase,
+          userPasswordResetInformationsRepo:
+            userPasswordResetInformationRepositoryBase(testDataSource),
+        }),
+      ),
+      requestUserAccountVerificationController: requestAccountVerificationControllerBase(
+        requestAccountVerificationUseCaseBase({
+          usersRepo: usersRepoBase(testDataSource),
+          generateAndSendUserAccountVerificationEmail: generateAndSendUserAccountVerificationEmail,
+        }),
+      ),
+      verifyAccountController: verifyAccountControllerBase(
+        verifyAccountUseCaseBase({
+          usersRepo: usersRepoBase(testDataSource),
+          createUserTokensUseCase: createUserTokensUseCase,
+        }),
+      ),
+    }),
+  );
 
-export default server;
+  server.use(handleErrorMiddleware);
+  return server;
+}

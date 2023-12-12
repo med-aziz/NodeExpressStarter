@@ -1,4 +1,4 @@
-import { validateLoginPaylod } from 'app/src/v1/usecases/auth/login.usecase';
+import { validateLoginPayload } from 'app/src/v1/usecases/auth/login.usecase';
 import { VALIDATION_ERROR_MESSAGE } from 'app/src/v1/utils/validation/validate.schema';
 
 const loginTestData: Array<{ payload: any; err: boolean }> = [
@@ -37,12 +37,12 @@ describe('LOGIN USER PAYLOADS TESTS', () => {
     if (data.err) {
       it('SHOULD RETURN AN ERROR', () => {
         expect(() => {
-          validateLoginPaylod(data.payload);
+          validateLoginPayload(data.payload);
         }).toThrow(VALIDATION_ERROR_MESSAGE);
       });
     } else {
       it('SHOULD SUCCEED', () => {
-        const result = validateLoginPaylod(data.payload);
+        const result = validateLoginPayload(data.payload);
         expect(result).toEqual(true);
       });
     }

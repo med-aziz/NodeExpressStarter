@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
 const handlebarOptions: hbs.NodemailerExpressHandlebarsOptions = {
   viewEngine: {
     partialsDir: path.resolve(__dirname, './views/'),
-    defaultLayout: 'false',
+    defaultLayout: false,
   },
   viewPath: path.resolve(__dirname, './views/'),
 };

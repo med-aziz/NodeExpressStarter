@@ -5,7 +5,7 @@ import * as bcryptjs from 'bcryptjs';
 import { IUser } from '../../domain/users/user';
 import { CreateUserTokensUseCaseType, createUserTokensUseCase } from './createUserTokens.usecase';
 import { ILoginPayload } from '../../domain/auth/login';
-import { validatePayloadSchema } from '../../utils/validation/validate.schema';
+import { trimAndValidateSchemaPayload } from '../../utils/validation/validate.schema';
 import loginSchema from '../../presenters/schemas/auth/login.schema';
 import {
   ACCOUNT_NOT_FOUND_ERROR_MESSAGE,
@@ -22,7 +22,7 @@ export const loginUseCaseBase =
     createUserTokensUseCase: CreateUserTokensUseCaseType;
   }) =>
   async (loginData: ILoginPayload) => {
-    validateLoginPaylod(loginData);
+    validateLoginPayload(loginData);
     const userFound = await dependencies.usersRepo.findOne({
       where: {
         email: loginData.email,
@@ -47,8 +47,8 @@ export const loginUseCaseBase =
     };
   };
 
-export function validateLoginPaylod(payload: ILoginPayload): boolean {
-  validatePayloadSchema(loginSchema, payload);
+export function validateLoginPayload(payload: ILoginPayload): boolean {
+  trimAndValidateSchemaPayload<ILoginPayload>(loginSchema, payload);
   return true;
 }
 export const loginUseCase: LoginUseCaseType = loginUseCaseBase({
