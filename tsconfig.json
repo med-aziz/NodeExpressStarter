@@ -26,5 +26,11 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  "exclude": ["ormconnection.js", "migrations", "testormconnection.js", "dist"]
+  "exclude": [
+    "ormconnection.js",
+    "migrations",
+    "testormconnection.js",
+    "dist",
+    "commitlint.config.js"
+  ]
 }

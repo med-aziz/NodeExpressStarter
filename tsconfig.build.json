@@ -6,6 +6,7 @@
     "**/*spec.ts",
     "migrations",
     "./ormconnection.js",
-    "./testormconnection.js"
+    "./testormconnection.js",
+    "commitlint.config.js"
   ]
 }
